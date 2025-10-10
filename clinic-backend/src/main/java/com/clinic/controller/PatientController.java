@@ -7,21 +7,23 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/patients")
+@RequestMapping("/patients")
+@CrossOrigin(origins = "http://localhost:3000") // permite que o frontend acesse
 public class PatientController {
-    private final PatientRepository repo;
 
-    public PatientController(PatientRepository repo) {
-        this.repo = repo;
+    private final PatientRepository patientRepository;
+
+    public PatientController(PatientRepository patientRepository) {
+        this.patientRepository = patientRepository;
     }
 
     @GetMapping
-    public List<Patient> getAll() {
-        return repo.findAll();
+    public List<Patient> getAllPatients() {
+        return patientRepository.findAll();
     }
 
     @PostMapping
-    public Patient create(@RequestBody Patient patient) {
-        return repo.save(patient);
+    public Patient createPatient(@RequestBody Patient patient) {
+        return patientRepository.save(patient);
     }
 }
