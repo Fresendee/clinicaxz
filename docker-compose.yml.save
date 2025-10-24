@@ -1,4 +1,15 @@
-version: '3.9'
+version: '3.9' frontend:
+    build: ./clinic-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./clinic-frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_API_URL=http://localhost:5000
+    depends_on:
+      - backend
 
 services:
   mysql:
@@ -19,7 +30,18 @@ services:
     image: quay.io/keycloak/keycloak:21.1.1
     container_name: clinic-keycloak
     environment:
-      KEYCLOAK_ADMIN: admin
+ frontend:
+    build: ./clinic-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./clinic-frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_API_URL=http://localhost:5000
+    depends_on:
+      - backend      KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     command: start-dev
     ports:
@@ -30,7 +52,18 @@ services:
   backend:
     build:
       context: .
-      dockerfile: clinic-backend/Dockerfile
+ frontend:
+    build: ./clinic-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./clinic-frontend:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - REACT_APP_API_URL=http://localhost:5000
+    depends_on:
+      - backend      dockerfile: clinic-backend/Dockerfile
     container_name: clinic-backend
     ports:
       - "8080:8080"
@@ -43,23 +76,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: clinicpass
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://keycloak:8080/realms/clinic
       SPRING_FLYWAY_ENABLED: "false"
-
-  frontend:
-    build:
-      context: ./clinic-frontend
-      dockerfile: Dockerfile
-    container_name: clinic-frontend
-    ports:
-      - "3000:3000"
-    volumes:
-      - ./clinic-frontend:/app
-      - /app/node_modules
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-      - REACT_APP_API_URL=http://localhost:8080
-    depends_on:
-      - backend
-
+    
 volumes:
   mysql-data:
-
