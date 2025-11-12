@@ -1,3 +1,3 @@
-## Clinica Médica Backend ##
+# Clinica Médica Backend #
 
-# Terceiro periodo - Implementar comunicação com o Postman #
+## Terceiro periodo - Implementar comunicação com o Postman ##
