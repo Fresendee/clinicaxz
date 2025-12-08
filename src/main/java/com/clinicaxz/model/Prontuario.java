@@ -1,5 +1,6 @@
 package com.clinicaxz.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,6 +21,8 @@ public class Prontuario {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "consulta_id", nullable = false)
+    // A correção está aqui abaixo: evita o erro 500 ao tentar ler o objeto LAZY
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Consulta consulta;
 
     @Column(nullable = false, columnDefinition = "TEXT")

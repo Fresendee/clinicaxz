@@ -12,16 +12,22 @@ import java.util.List;
 
 @Repository
 public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
+
+    // --- ADICIONE ESTA LINHA ---
+    // Verifica se já existe consulta para este médico nesta data exata
+    boolean existsByMedicoIdAndDataHora(Long medicoId, LocalDateTime dataHora);
+    // ---------------------------
+
     List<Consulta> findByMedicoId(Long medicoId);
     List<Consulta> findByPacienteId(Long pacienteId);
     List<Consulta> findByStatus(EnumStatusConsulta status);
-    
+
     @Query("SELECT c FROM Consulta c WHERE c.medico.id = :medicoId AND c.dataHora BETWEEN :inicio AND :fim AND c.status = 'AGENDADA'")
-    List<Consulta> findConsultasAgendadasMedico(@Param("medicoId") Long medicoId, 
-                                                  @Param("inicio") LocalDateTime inicio, 
-                                                  @Param("fim") LocalDateTime fim);
-    
+    List<Consulta> findConsultasAgendadasMedico(@Param("medicoId") Long medicoId,
+                                                @Param("inicio") LocalDateTime inicio,
+                                                @Param("fim") LocalDateTime fim);
+
     @Query("SELECT c FROM Consulta c WHERE c.dataHora BETWEEN :inicio AND :fim")
-    List<Consulta> findConsultasPorPeriodo(@Param("inicio") LocalDateTime inicio, 
-                                            @Param("fim") LocalDateTime fim);
+    List<Consulta> findConsultasPorPeriodo(@Param("inicio") LocalDateTime inicio,
+                                           @Param("fim") LocalDateTime fim);
 }
